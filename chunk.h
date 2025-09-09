@@ -5,16 +5,21 @@
 #include "value.h"
 
 typedef enum {
-  OP_RETURN,
-  OP_CONSTANT,
+    OP_RETURN,
+    OP_CONSTANT,
+    OP_NEGATE,
+    OP_ADD,
+    OP_SUBTRACT,
+    OP_MULTIPLY,
+    OP_DIVIDE,
 } op_code;
 
 typedef struct {
-  int count;
-  int capacity;
-  int *lines;
-  uint8_t *code;
-  ValueArray constants;
+    int count;
+    int capacity;
+    int *lines;
+    uint8_t *code;
+    ValueArray constants;
 } Chunk;
 
 void initChunk(Chunk *chuck);
