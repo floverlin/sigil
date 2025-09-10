@@ -4,7 +4,7 @@ import sys
 name = "build"
 
 
-def exe():
+def exe(name: str):
     return f"{name}.exe"
 
 
@@ -19,13 +19,13 @@ def build() -> int:
 
 
 def run():
-    try:
-        if build() == 0:
-            os.system(exe())
-    except KeyboardInterrupt:
-        return
-    finally:
-        os.remove(exe())
+    if build() == 0:
+        try:
+            os.system(exe(name))
+        except KeyboardInterrupt:
+            return
+        finally:
+            os.remove(exe(name))
 
 
 def check_flag(flag: str, short: str | None = None) -> bool:
