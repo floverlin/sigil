@@ -1,37 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "chunk.h"
 #include "common.h"
 #include "debug.h"
 #include "value.h"
 #include "vm.h"
 
-int main(int agrc, char *argv[]) {
+static void repl() {
+    char line[2048];
+
+    for (;;) {
+        printf(">>> ");
+
+        if (!fgets(line, sizeof(line), stdin)) {
+            printf("\n");
+            break;
+        }
+
+        interpret(line);
+    }
+}
+
+static char *readFile(const char *path) {
+    FILE *file = fopen(path, "rb");
+    if (file == NULL) {
+        fprintf(stderr, "Could not open file \"%s\"\n", path);
+        exit(74);
+    }
+    fseek(file, 0L, SEEK_END);
+    size_t fileSize = ftell(file);
+    rewind(file);
+
+    char *buf = (char *)malloc(fileSize + 1);
+    if (buf == NULL) {
+        fprintf(stderr, "Not enough memory to read \"%s\"\n", path);
+        exit(74);
+    }
+    size_t bytesRead = fread(buf, sizeof(char), fileSize, file);
+    if(bytesRead < fileSize) {
+        fprintf(stderr, "Could not read file \"%s\"\n ", path);
+        exit(74);
+    }
+    buf[bytesRead] = '\0';
+
+    fclose(file);
+    return buf;
+}
+
+static void runFile(const char *path) {
+    char *source = readFile(path);
+    InterpretResult result = interpret(source);
+    free(source);
+
+    if (result == INTERPRET_COMPILE_ERROR) exit(65);
+    if (result == INTERPRET_RUNTIME_ERROR) exit(70);
+}
+
+int main(int argc, char *argv[]) {
     initVM();
 
-    Chunk chunk;
-    Chunk *ch = &chunk;
-    initChunk(ch);
+    if (argc == 1) {
+        repl();
+    } else if (argc == 2) {
+        runFile(argv[1]);
+    } else {
+        fprintf(stderr, "Usage: sigil [path]\n");
+        exit(64);
+    }
 
-    int constant;
-
-    constant = addConstant(ch, 11.76);
-    writeChunk(ch, OP_CONSTANT, 1);
-    writeChunk(ch, constant, 1);
-
-    constant = addConstant(ch, 11);
-    writeChunk(ch, OP_CONSTANT, 2);
-    writeChunk(ch, constant, 2);
-
-    writeChunk(ch, OP_NEGATE, 2);
-
-    writeChunk(ch, OP_ADD, 3);
-
-    writeChunk(ch, OP_RETURN, 100);
-
-    disassembleChunk(ch, "test chunk");
-
-    interpret(ch);
-
-    freeChunk(ch);
     freeVM();
     return 0;
 }

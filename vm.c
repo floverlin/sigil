@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include "debug.h"
+#include "compiler.h"
 
 VM vm;
 
@@ -35,6 +36,7 @@ static InterpretResult run() {
             printValue(*slot);
             printf(" ]");
         }
+
         printf("\n");
 #endif
         uint8_t instruction;
@@ -71,8 +73,7 @@ static InterpretResult run() {
 #undef BINARY_OP
 }
 
-InterpretResult interpret(Chunk* chunk) {
-    vm.chunk = chunk;
-    vm.pc = vm.chunk->code;
-    return run();
+InterpretResult interpret(char* source) {
+    compile(source);
+    return INTERPRET_OK;
 }

@@ -22,7 +22,7 @@ typedef struct {
 void initVM(void);
 void freeVM(void);
 
-InterpretResult interpret(Chunk* chunk);
+InterpretResult interpret(char *source);
 
 void push(Value value);
 Value pop(void);
