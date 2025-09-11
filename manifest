@@ -27,11 +27,6 @@ until i > 0 with iteration do
     print iteration  # 1 2 3 4 5 6 7 8 9 10
 end
 
-import std.meta
-# import meta as m
-# import set, get from meta as s, g
-# import @ from meta
-
 let me = {
     1, 2, 3, [4] = "!",
     name = "Lin",
@@ -43,8 +38,7 @@ end
 me.greet = greet
 me:greet {name = "Snarkee"}
 
-import std.table
-table.append(me, 4)  # [1, 2, 3] [3] = nil -> [1, 2, 3, 4, "!"]
+table.append(me, 4)  # [1, 2, 3] ([3] = nil) -> [1, 2, 3, 4, "!"]
 
 let stack_meta = {
     pop = with self do
@@ -55,7 +49,7 @@ let stack_meta = {
     end,
     push = table.append,
 }
-meta.set_meta(me, stack_meta)
+meta(me, stack_meta)
 me:push "!!!"  # [1, 2, 3, 4, "!"] - > [1, 2, 3, 4, "!", "!!!"]
 for range(table.length(me), -1, 1) repeat
     print me:pop  # print me.pop me
@@ -81,6 +75,9 @@ switch sw
 end  # auto 'break' -> use 'fall'
 
 import http
+# import http as web
+# import get, post from http as fetch_get, fetch_post
+# import @ from http
 let af = async with address do
     return http.get address
 end
@@ -89,12 +86,30 @@ let result = await af "github.com"
 let unsafe = do
     error "lol"
 end
-let r = try unsafe nil  # { _value = nil, _error = "lol" }
+let r = try unsafe  # { _value = nil, _error = "lol" }
 r.or(nil)
 r.unwrap()
 r.catch(with error do print "fail: {error}" end)
 
 # to boolean: nil = false, other = true
+
+class Animal define
+    public new = with self, name do self.name = name; print "New animal!" end
+
+    public speak = do print "sound..." end
+end
+
+class Dog from Animal as super define
+    public new = with self, name do super name end
+
+    private dog_sound = do return "woof!" end
+
+    public speak = with self do print self:dog_sound end
+end
+
+let bobby = Dog "Bobby"
+type(bobby)  # "Dog"
+bobby:speak  # "woof!"
 
 ```
 
@@ -108,13 +123,36 @@ go cobra cli
 
 # TYPES
 
+1. nil
+2. boolean
+3. number
+4. string
+5. table
+6. function
+
 ```sigillum
 let a string = "abc"
 let b number = 11.76
-let c (string, number) string = with str string, num number do
+let c function(string, number) string = with str string, num number do
     for range num - 1 repeat
         str += str
     end
     return str
 end  # return ?
 ```
+
+# META
+
+|     math     | cond |   prop    |  type   |   iter   | spec |
+| :----------: | :--: | :-------: | :-----: | :------: | :--: |
+|     plus     |  eq  |   index   | boolean | iterator | call |
+|    minus     |  lt  | new_index | string  |   next   | type |
+|     star     |  le  |           | number  |          |      |
+|    slash     |      |           |         |          |      |
+| double_star  |      |           |         |          |      |
+| double_slash |      |           |         |          |      |
+| unary_minus  |      |           |         |          |      |
+
+`+ - / * // **`
+
+snvrk0x032d

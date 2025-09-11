@@ -16,7 +16,8 @@ typedef struct {
     Value stack[STACK_MAX];
     Value *stackTop;
     uint8_t *pc;
-    Chunk* chunk;
+    Chunk *chunk;
+    Obj *objects;
 } VM;
 
 void initVM(void);
@@ -26,5 +27,7 @@ InterpretResult interpret(char *source);
 
 void push(Value value);
 Value pop(void);
+
+extern VM vm;
 
 #endif
