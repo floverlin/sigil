@@ -3,6 +3,7 @@
 
 #include "chunk.h"
 #include "value.h"
+#include "table.h"
 
 #define STACK_MAX 256
 
@@ -18,6 +19,7 @@ typedef struct {
     uint8_t *pc;
     Chunk *chunk;
     Obj *objects;
+    Table strings;
 } VM;
 
 void initVM(void);

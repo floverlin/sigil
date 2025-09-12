@@ -114,8 +114,8 @@ static Token number() {
     return makeToken(TOKEN_NUMBER);
 }
 
-static TokenType checkKeyword(int start, int length, const char *rest,
-                              TokenType type) {
+static TokenType checkKeyword(
+    int start, int length, const char *rest, TokenType type) {
     if (lexer.current - lexer.start == start + length &&
         memcmp(lexer.start + start, rest, length) == 0) {
         return type;

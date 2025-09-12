@@ -58,7 +58,7 @@ end  # "!!!" "!" 4 3 2
 
 # export me
 
-if 1 < 2 then
+if 1 < 2 then  # unless
     print true
 else  # elif
     print false
@@ -92,24 +92,6 @@ r.unwrap()
 r.catch(with error do print "fail: {error}" end)
 
 # to boolean: nil = false, other = true
-
-class Animal define
-    public new = with self, name do self.name = name; print "New animal!" end
-
-    public speak = do print "sound..." end
-end
-
-class Dog from Animal as super define
-    public new = with self, name do super name end
-
-    private dog_sound = do return "woof!" end
-
-    public speak = with self do print self:dog_sound end
-end
-
-let bobby = Dog "Bobby"
-type(bobby)  # "Dog"
-bobby:speak  # "woof!"
 
 ```
 

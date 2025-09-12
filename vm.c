@@ -17,10 +17,12 @@ static void resetStack() { vm.stackTop = vm.stack; }
 void initVM() {
     resetStack();
     vm.objects = NULL;
+    initTable(&vm.strings);
 }
 
 void freeVM() {
     freeObjects();
+    freeTable(&vm.strings);
 }
 
 void push(Value value) { *vm.stackTop++ = value; }
