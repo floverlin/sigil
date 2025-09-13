@@ -1,0 +1,14 @@
+let world = "World
+print "Hello ", world + "!\n"
+
+let ndl = "needle"
+let ldn = string.reverse ndl
+(3..0).each |n| {
+    print(
+        string.reverse(
+            string.replace(
+                ldn, "e", "", n
+            )
+        )
+    )
+}

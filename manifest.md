@@ -1,140 +1,57 @@
-# SIGILLUM
+# NEEDLE
 
-```sigillum
-let my_name = "Lin"
-let hello = "Hello, my name is {my_name}" + "!"
-let a, b, c = "a", 2, true
-
-let greet = with name do
-    print "Hi, ", name, "!"
-end
-greet my_name
-
-let list = {1, 2, 3, 4}
-for enumerate list with index, number do
-    print number * index
-end
-
-let f = with number do print number end
-for list f
-
-while i < 10 repeat
-    i++
-end
-
-until i > 0 with iteration do
-    i--
-    print iteration  # 1 2 3 4 5 6 7 8 9 10
-end
-
-let me = {
-    1, 2, 3, [4] = "!",
-    name = "Lin",
-    ["hero"] = "Arc Warden",
-}
-greet = with self, other do
-    print "Hello, {other.name}! It's me, {self.name}"
-end
-me.greet = greet
-me:greet {name = "Snarkee"}
-
-table.append(me, 4)  # [1, 2, 3] ([3] = nil) -> [1, 2, 3, 4, "!"]
-
-let stack_meta = {
-    pop = with self do
-        let last = table.length(self) - 1
-        let temp = self[last]
-        self[last] = nil
-        return temp
-    end,
-    push = table.append,
-}
-meta(me, stack_meta)
-me:push "!!!"  # [1, 2, 3, 4, "!"] - > [1, 2, 3, 4, "!", "!!!"]
-for range(table.length(me), -1, 1) repeat
-    print me:pop  # print me.pop me
-end  # "!!!" "!" 4 3 2
-# [1, 2, 3, 4, "!", "!!!"] -> [1]
-
-# export me
-
-if 1 < 2 then  # unless
-    print true
-else  # elif
-    print false
-end
-
-let sw = "2"
-switch sw
-    case "1" then
-        print "one"
-    case "2" then
-        print "two"
-    else
-        print "ohh..."
-end  # auto 'break' -> use 'fall'
-
-import http
-# import http as web
-# import get, post from http as fetch_get, fetch_post
-# import @ from http
-let af = async with address do
-    return http.get address
-end
-let result = await af "github.com"
-
-let unsafe = do
-    error "lol"
-end
-let r = try unsafe  # { _value = nil, _error = "lol" }
-r.or(nil)
-r.unwrap()
-r.catch(with error do print "fail: {error}" end)
-
-# to boolean: nil = false, other = true
+```needle
 
 ```
 
-# SIGIL
+.ndl
 
 source -> scanner -> parser -> compiler -> VM
 
-bytecode fragment
+- bytecode fragments
+- swiss hash tables
+- go cobra cli
+- prototype-based
 
-go cobra cli
+# FLOW
+
+- |args| { body }
+- {|args| body }
+- return
+
+- repeat
+- while
+- until
+- break
+- continue
+
+- if
+- unless
+- else
+
+- switch
+- case
+- default
+- fall
 
 # TYPES
 
-1. nil
-2. boolean
-3. number
-4. string
-5. table
-6. function
-
-```sigillum
-let a string = "abc"
-let b number = 11.76
-let c function(string, number) string = with str string, num number do
-    for range num - 1 repeat
-        str += str
-    end
-    return str
-end  # return ?
-```
+1. nil (`nil`)
+2. boolean (`true`)
+3. number (`81.3`)
+4. string (`"hello"`)
+5. table (`{ isTable = true }`)
+6. function (`function say(arg) { print arg }`)
 
 # META
 
-|     math     | cond |   prop    |  type   |   iter   | spec |
-| :----------: | :--: | :-------: | :-----: | :------: | :--: |
-|     plus     |  eq  |   index   | boolean | iterator | call |
-|    minus     |  lt  | new_index | string  |   next   | type |
-|     star     |  le  |           | number  |          |      |
-|    slash     |      |           |         |          |      |
-| double_star  |      |           |         |          |      |
-| double_slash |      |           |         |          |      |
-| unary_minus  |      |           |         |          |      |
-
-`+ - / * // **`
-
-snvrk0x032d
+|     math     | cond |   prop    |  type   |   iter   |  spec  |
+| :----------: | :--: | :-------: | :-----: | :------: | :----: |
+|     plus     |  eq  |   index   | boolean | iterator | length |
+|    minus     |  lt  | new_index | string  |   next   |  type  |
+|     star     |  le  |           | number  |          |  call  |
+|    slash     |      |           |         |          |        |
+|  unary_plus  |      |           |         |          |        |
+| unary_minus  |      |           |         |          |        |
+| double_star  |      |           |         |          |        |
+| double_slash |      |           |         |          |        |

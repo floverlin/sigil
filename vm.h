@@ -20,6 +20,7 @@ typedef struct {
     Chunk *chunk;
     Obj *objects;
     Table strings;
+    Table globals;
 } VM;
 
 void initVM(void);
