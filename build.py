@@ -1,7 +1,7 @@
 import os
 import sys
 
-name = "build"
+NAME = "build"
 
 
 def exe(name: str):
@@ -15,17 +15,17 @@ files = list(files)
 
 
 def build() -> int:
-    return os.system(f"gcc -o {name} {" ".join(files)}")
+    return os.system(f"gcc -o {NAME} {" ".join(files)}")
 
 
-def run():
+def run(args: list[str]):
     if build() == 0:
         try:
-            os.system(exe(name))
+            os.system(exe(NAME) + " " + " ".join(args))
         except KeyboardInterrupt:
             return
         finally:
-            os.remove(exe(name))
+            os.remove(exe(NAME))
 
 
 def check_flag(flag: str, short: str | None = None) -> bool:
@@ -34,8 +34,18 @@ def check_flag(flag: str, short: str | None = None) -> bool:
     )
 
 
+def find_flag_index(flag: str, short: str | None = None) -> int:
+    index = None
+    try:
+        index = sys.argv.index("--" + flag)
+    except ValueError:
+        index = sys.argv.index("-" + short)
+    return index
+
+
 if check_flag("run", "r"):
-    name = "__" + name
-    run()
+    name = "__" + NAME
+    idx = find_flag_index("run", "r")
+    run(sys.argv[idx + 1 :])
 else:
     build()

@@ -2,6 +2,9 @@
 #define sil_compiler_h
 
 #include "vm.h"
+#include "lexer.h"
+
+#define UINT8_COUNT (UINT8_MAX + 1)
 
 typedef enum {
     PREC_NONE,
@@ -16,6 +19,17 @@ typedef enum {
     PREC_CALL,        // . ()
     PREC_PRIMARY
 } Precedence;
+
+typedef struct {
+    Token name;
+    int depth;
+} Local;
+
+typedef struct {
+    Local locals[UINT8_COUNT];
+    int localCount;
+    int scopeDepth;
+} Compiler;
 
 typedef void (*ParseFn)(bool canAssign);
 

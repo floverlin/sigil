@@ -1,4 +1,4 @@
-let world = "World
+let world = "World"
 print "Hello ", world + "!\n"
 
 let ndl = "needle"
