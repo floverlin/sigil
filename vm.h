@@ -1,11 +1,12 @@
 #ifndef sil_vm_h
 #define sil_vm_h
 
-#include "chunk.h"
-#include "value.h"
 #include "table.h"
+#include "value.h"
+#include "object.h"
 
-#define STACK_MAX 256
+#define FRAMES_MAX 64 
+#define STACK_MAX (FRAMES_MAX * UINT8_COUNT)
 
 typedef enum {
     INTERPRET_OK,
@@ -14,10 +15,18 @@ typedef enum {
 } InterpretResult;
 
 typedef struct {
+    ObjFunction *function;
+    uint8_t *pc;
+    Value *slots;
+} CallFrame;
+
+typedef struct {
     Value stack[STACK_MAX];
     Value *stackTop;
-    uint8_t *pc;
-    Chunk *chunk;
+
+    CallFrame frames[FRAMES_MAX];
+    int frameCount;
+
     Obj *objects;
     Table strings;
     Table globals;

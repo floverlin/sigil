@@ -1,7 +1,6 @@
-var a = 5;
-{
-    var b = 15;
-    print a + b;
+var start = clock();
+var a = 1000;
+while (a != 0) {
+    a = a - 1;
 }
-print a;
-print b + 1;
+print clock() - start;

@@ -14,6 +14,12 @@ typedef enum {
     OP_GET_LOCAL,
     OP_SET_LOCAL,
 
+    OP_JUMP_IF_FALSE,
+    OP_JUMP,
+    OP_LOOP,
+
+    OP_CALL,
+
     OP_CONSTANT,
     OP_TRUE,
     OP_FALSE,

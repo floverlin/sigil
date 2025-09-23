@@ -29,18 +29,25 @@ def run(args: list[str]):
 
 
 def check_flag(flag: str, short: str | None = None) -> bool:
-    return (("--" + flag) in sys.argv) or (
-        (("-" + short) in sys.argv) if short else False
-    )
+    return "--" + flag in sys.argv or ("-" + short in sys.argv) if short else False
+
+
+def tryer(f, *args):
+    try:
+        res = f(*args)
+        return res
+    except Exception as e:
+        return None
 
 
 def find_flag_index(flag: str, short: str | None = None) -> int:
-    index = None
-    try:
-        index = sys.argv.index("--" + flag)
-    except ValueError:
-        index = sys.argv.index("-" + short)
-    return index
+    res = tryer(sys.argv.index, "--" + flag)
+    if res != None:
+        return res
+    res = tryer(sys.argv.index, "-" + short)
+    if res != None:
+        return res
+    return None
 
 
 if check_flag("run", "r"):

@@ -55,7 +55,7 @@ static void adjustCapacity(Table* table, int cap) {
         Entry* entry = &table->entries[i];
         if (entry->key == NULL) continue;
 
-        Entry* dest = findEntry(entry, cap, entry->key);
+        Entry* dest = findEntry(entries, cap, entry->key);
         dest->key = entry->key;
         dest->value = entry->value;
         table->count++;
@@ -71,9 +71,9 @@ bool tableSet(Table* table, ObjString* key, Value value) {
         int cap = GROW_CAPACITY(table->cap);
         adjustCapacity(table, cap);
     }
-
     Entry* entry = findEntry(table->entries, table->cap, key);
     bool isNewKey = entry->key == NULL;
+
     if (isNewKey && IS_NIL(entry->value)) table->count++;
 
     entry->key = key;
@@ -95,7 +95,7 @@ bool tableGet(Table* table, ObjString* key, Value* value) {
         return false;
     }
     Entry* entry = findEntry(table->entries, table->cap, key);
-    if (entry->key = NULL) {
+    if (entry->key == NULL) {
         return false;
     }
     *value = entry->value;

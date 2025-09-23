@@ -1,10 +1,9 @@
 #ifndef sil_compiler_h
 #define sil_compiler_h
 
-#include "vm.h"
 #include "lexer.h"
-
-#define UINT8_COUNT (UINT8_MAX + 1)
+#include "object.h"
+#include "vm.h"
 
 typedef enum {
     PREC_NONE,
@@ -20,12 +19,20 @@ typedef enum {
     PREC_PRIMARY
 } Precedence;
 
+typedef enum {
+    TYPE_FUNCTION,
+    TYPE_SCRIPT,
+} FunctionType;
+
 typedef struct {
     Token name;
     int depth;
 } Local;
 
-typedef struct {
+typedef struct Compiler {
+    struct Compiler *enclosing;
+    ObjFunction *function;
+    FunctionType type;
     Local locals[UINT8_COUNT];
     int localCount;
     int scopeDepth;
@@ -39,6 +46,6 @@ typedef struct {
     Precedence precedence;
 } ParseRule;
 
-bool compile(const char *source, Chunk *chunk);
+ObjFunction *compile(const char *source);
 
 #endif
